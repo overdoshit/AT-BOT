@@ -17,7 +17,8 @@ from discord_webhook import *
 # Debug Address
 chrome_options = Options()
 chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:8901")
-driver = webdriver.Chrome(options = chrome_options)
+path = r"C:\Users\ASUS\Desktop\Learning\chromedriver.exe"
+driver = webdriver.Chrome(path, options = chrome_options)
 
 # Data
 NIM         = "17210757"
