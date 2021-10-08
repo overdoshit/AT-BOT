@@ -2,43 +2,46 @@ import selenium
 import datetime
 import time
 import schedule
+import discord_webhook
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.expected_conditions import presence_of_element_located
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 from discord_webhook import *
 
 # chrome.exe -remote-debugging-port=8901 --user-data-dir="C:\Selenium\EVRDS-8901"
 
+# Login
+
 # Debug Address
 chrome_options = Options()
 chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:8901")
-path = r"C:\Users\ASUS\Desktop\Learning\chromedriver.exe"
+path = r"C:\Users\ASUS\Desktop\Learning\Python-Language\AT-BOT\chromedriver.exe"
 driver = webdriver.Chrome(path, options = chrome_options)
 
-# Data
-NIM         = "17210757"
-Name        = "Faiz Aditya Kurniawan"
-Class       = "17.1A.27"
-Password    = ""
-url         = "https://discord.com/api/webhooks/895862701799120926/PIdi5Gc0GOFsD0wexJYShpfbcKsu1DM0MD-Dbcd7M7Q8xHlZpqMwYjHKEi3oLLHG222r"
-icon        = "https://cdn.discordapp.com/attachments/778645573498175538/895915601678200872/AT_BOT.gif"
-username    = "AT BOT"
-
 # AT BOT
-print("\n" + "=" * 30)
-print("AT BOT".center(30))
-print("=" * 30 + "\n")
+print("\n" + "=" * 40)
+print("AT BOT".center(40))
+print("=" * 40)
 
 # Dashboard
 Dashboard   = "http://elearning.bsi.ac.id/user/dashboard"
 driver.get(Dashboard)
 
+# Data
+NIM         = driver.find_element_by_id("fullName").get_attribute('value')
+Name        = driver.find_element_by_id("eMail").get_attribute('value').title()
+Class       = driver.find_element_by_id("addRess").get_attribute('value')
+Url         = "https://discord.com/api/webhooks/895862701799120926/PIdi5Gc0GOFsD0wexJYShpfbcKsu1DM0MD-Dbcd7M7Q8xHlZpqMwYjHKEi3oLLHG222r"
+Icon        = "https://cdn.discordapp.com/attachments/778645573498175538/895915601678200872/AT_BOT.gif"
+Username    = "AT BOT"
+
+print("NIM      =", NIM)
+print("Name     =", Name)
+print("Class    =", Class)
+
 # List Matkul
+print("\nMatkul   :")
 matkul      = ["1. Entrepreneurship", "2. Dasar Pemrograman", "3. Logika & Algoritma", "4. Pengantar TIK", "5. Bahasa Inggris"]
 for isi in matkul:
 	print(isi)
@@ -89,7 +92,7 @@ start_time = time.time()
 absen = driver.find_element_by_xpath('//*[@class="btn btn-primary btn-rounded left"]')
 absen.click()
 day = datetime.datetime.now()
-print("\n" + "-" * 30)
+print("\n" + "-" * 40)
 print(NIM, "Absen at", day.strftime("%X"))
 
 # Feedback
@@ -104,12 +107,12 @@ kirim.click()
 timestamp = time.time() - start_time
 timeexecution = ("%.1f Second" % (timestamp))
 print("Time Execution = " ,timeexecution)
-print("-" * 30 + "\n")
+print("-" * 40 + "\n")
 
 # Webhook Discord
-webhook = DiscordWebhook(url=url, username=username)
+webhook = DiscordWebhook(url=Url, username=Username)
 embed = DiscordEmbed(color = 0x33FFFF)
-embed.set_author(name=username, url=Dashboard, icon_url=icon)
+embed.set_author(name=Username, url=Dashboard, icon_url=Icon)
 embed.add_embed_field(name="NIM", value=NIM, inline=False)
 embed.add_embed_field(name="Name", value=Name, inline=False)
 embed.add_embed_field(name="Class", value=Class, inline=False)
@@ -117,7 +120,7 @@ embed.add_embed_field(name="Matkul", value=Matkul, inline=False)
 embed.add_embed_field(name="Status", value="✅ Success", inline=True)
 embed.add_embed_field(name="Time", value=day.strftime("%X"), inline=True)
 embed.add_embed_field(name="Execution", value=timeexecution, inline=True)
-embed.set_footer(text="V.1.2 • Made with ☕ by Faiz")
+embed.set_footer(text="V.1.3 • Made with ☕ by Faiz")
 embed.set_timestamp()
 
 webhook.add_embed(embed)
