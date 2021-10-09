@@ -1,7 +1,6 @@
 import selenium
 import datetime
 import time
-import schedule
 import discord_webhook
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -117,10 +116,10 @@ embed.add_embed_field(name="NIM", value=NIM, inline=False)
 embed.add_embed_field(name="Name", value=Name, inline=False)
 embed.add_embed_field(name="Class", value=Class, inline=False)
 embed.add_embed_field(name="Matkul", value=Matkul, inline=False)
-embed.add_embed_field(name="Status", value="✅ Success", inline=True)
-embed.add_embed_field(name="Time", value=day.strftime("%X"), inline=True)
-embed.add_embed_field(name="Execution", value=timeexecution, inline=True)
-embed.set_footer(text="V.1.3 • Made with ☕ by Faiz")
+embed.add_embed_field(name="Status", value="☑️ Success", inline=True)
+embed.add_embed_field(name="Time", value="🕖 "+day.strftime("%X"), inline=True)
+embed.add_embed_field(name="Execution", value="⏱️ "+timeexecution, inline=True)
+embed.set_footer(text="✨ V.1.3 • Made with ☕ by Faiz")
 embed.set_timestamp()
 
 webhook.add_embed(embed)
