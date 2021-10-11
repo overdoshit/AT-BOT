@@ -99,7 +99,7 @@ feedback = driver.find_element_by_xpath('//*[@class="form-control "]')
 feedback.send_keys("Pengajaran Sesuai")
 
 # Kirim Feedback
-kirim = driver.find_elements_by_xpath('//*[@class="btn btn-primary btn-rounded left mt-4"]')
+kirim = driver.find_element_by_xpath('//*[@class="btn btn-primary btn-rounded left mt-4"]')
 kirim.click()
 
 # Timestamp
