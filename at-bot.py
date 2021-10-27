@@ -85,10 +85,10 @@ else:
 
 # Refresh Page
 while not driver.find_elements(By.XPATH, '//*[@class="btn btn-primary btn-rounded left"]'):
-            dt = datetime.datetime.now()
-            print(f"\r{dt.strftime('%A %d/%m/%Y %H:%M:%S')}", end="")
-            driver.refresh()
-            time.sleep(0.2)
+        dt = datetime.datetime.now()
+        print(f"\r{dt.strftime('%A %d/%m/%Y %H:%M:%S')}", end="")
+        driver.refresh()
+        time.sleep(0.2)
 
 # Absen
 start_time = time.time()
