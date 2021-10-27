@@ -1,2 +1,2 @@
 discord_webhook==0.14.0
-selenium==3.141.0
+selenium==4.0.0
