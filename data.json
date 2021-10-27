@@ -1,0 +1,34 @@
+{
+    "port"      : "<PORT>",
+    "path"      : "<PATH>",
+    
+    "dashboard" : "http://elearning.bsi.ac.id/user/dashboard",
+    "logout"    : "http://elearning.bsi.ac.id/logout",
+    
+    "username"  : "<USERNAME>",
+    "password"  : "<PASSWORD>",
+    
+    "matkul"    : [
+        "<MATKUL0>", 
+        "<MATKUL1>", 
+        "<MATKUL2>", 
+        "<MATKUL3>", 
+        "<MATKUL4>"
+    ],
+
+    "link"      : [
+        
+        "<LINK0>",
+        "<LINK1>", 
+        "<LINK2>", 
+        "<LINK3>", 
+        "<LINK4>"
+        
+    ],
+
+    "feedback"  : "Pengajaran Sesuai",
+    
+    "bot"       : "<NAME WEBHOOK>",
+    "webhook"   : "<LINK WEBHOOK>",
+    "icon"      : "<ICON WEBHOOK>"
+}
