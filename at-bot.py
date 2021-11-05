@@ -1,4 +1,5 @@
 import selenium
+import schedule
 import datetime
 import time
 import json
@@ -30,99 +31,97 @@ print("""\033[92m
   ███████║   ██║       ██████╔╝██║   ██║   ██║   
   ██╔══██║   ██║       ██╔══██╗██║   ██║   ██║   
   ██║  ██║   ██║       ██████╔╝╚██████╔╝   ██║   
-  ╚═╝  ╚═╝   ╚═╝       ╚═════╝  ╚═════╝    ╚═╝   \033[33mV.1.4
+  ╚═╝  ╚═╝   ╚═╝       ╚═════╝  ╚═════╝    ╚═╝   \033[33mV.1.5
 \033[00m""", end="")
 print("\033[92m─" * 56 +"\033[00m")
 print("\n" + "PORT :", "\033[33m"+data["port"]+"\033[00m" + "\n")
 
-# Login
-driver.get(data["dashboard"])
-driver.find_element(By.ID, "username").send_keys(data["username"])
-driver.find_element(By.ID, "password").send_keys(data["password"], Keys.ENTER)
+def absen(Matkul, Link):
+    print("\r" + "\033[33m─" * 56 + "\033[00m")
 
-# Data
-NIM = driver.find_element(By.ID, "fullName").get_attribute("value")
-Name = driver.find_element(By.ID, "eMail").get_attribute("value").title()
-Class = driver.find_element(By.ID, "addRess").get_attribute("value")
-print("NIM      =", NIM)
-print("Name     =", Name)
-print("Class    =", Class)
+    # Login
+    driver.get(data["dashboard"])
+    driver.find_element(By.ID, "username").send_keys(data["username"])
+    driver.find_element(By.ID, "password").send_keys(data["password"], Keys.ENTER)
 
-# List Matkul
-print("\nMatkul   :")
-i = 0
-for isi in data["matkul"]:
-    i += 1
-    print(i, isi)
+    # Data
+    NIM = driver.find_element(By.ID, "fullName").get_attribute("value")
+    Name = driver.find_element(By.ID, "eMail").get_attribute("value").title()
+    Class = driver.find_element(By.ID, "addRess").get_attribute("value")
 
-# Pilih Matkul
-pilih = int(input("\nPilih Matkul : "))
-print("\033[33m─" * 56 + "\033[00m")
-
-if pilih == 1:
-    Matkul = data["matkul"][0]
+    # Page Matkul
     print(Matkul)
-    driver.get(data["link"][0])
-elif pilih == 2:
-    Matkul = data["matkul"][1]
-    print(Matkul)
-    driver.get(data["link"][1])
-elif pilih == 3:
-    Matkul = data["matkul"][2]
-    print(Matkul)
-    driver.get(data["link"][2])
-elif pilih == 4:
-    Matkul = data["matkul"][3]
-    print(Matkul)
-    driver.get(data["link"][3])
-elif pilih == 5:
-    Matkul = data["matkul"][4]
-    print(Matkul)
-    driver.get(data["link"][4])
-else:
-    print("Pilih nomor yang benar!")
-    exit()
+    driver.get(Link)
 
-# Refresh Page
-while not driver.find_elements(By.XPATH, '//*[@class="btn btn-primary btn-rounded left"]'):
-        dt = datetime.datetime.now()
-        print(f"\r{dt.strftime('%A %d/%m/%Y %H:%M:%S')}", end="")
-        driver.refresh()
-        time.sleep(0.2)
+    # Refresh Page
+    while not driver.find_elements(By.XPATH, '//*[@class="btn btn-primary btn-rounded left"]'):
+            dt = datetime.datetime.now()
+            print(f"\r{dt.strftime('%A %d/%m/%Y %H:%M:%S')}", end="")
+            driver.refresh()
+            time.sleep(0.2)
 
-# Absen
-start_time = time.time()
-driver.find_element(By.XPATH, '//*[@class="btn btn-primary btn-rounded left"]').click()
-day = datetime.datetime.now()
-print("\n" + NIM, "Absen at", day.strftime("%X"))
+    # Absen
+    start_time = time.time()
+    driver.find_element(By.XPATH, '//*[@class="btn btn-primary btn-rounded left"]').click()
+    day = datetime.datetime.now()
+    print("\n" + NIM, "Absen at", day.strftime("%X"))
 
-# Feedback
-driver.find_element(By.XPATH, '//*[@class="form-control "]').send_keys(data["feedback"])
+    # Feedback
+    driver.find_element(By.XPATH, '//*[@class="form-control "]').send_keys(data["feedback"])
 
-# Kirim Feedback
-driver.find_element(By.XPATH, '//*[@class="btn btn-primary btn-rounded left mt-4"]').click()
+    # Kirim Feedback
+    driver.find_element(By.XPATH, '//*[@class="btn btn-primary btn-rounded left mt-4"]').click()
 
-# Timestamp
-timestamp = time.time() - start_time
-timeexecution = ("%.1f seconds" % (timestamp))
-print("Time Execution =", timeexecution)
-print("\033[33m─" * 56 + "\033[00m" + "\n")
+    # Timestamp
+    timestamp = time.time() - start_time
+    timeexecution = ("%.1f seconds" % (timestamp))
+    print("Time Execution =", timeexecution)
+    print("\033[33m─" * 56 + "\033[00m" + "\n")
+    
+    # Logout
+    driver.get(data["logout"])
+    
+    return webhook(NIM, Name, Class, Matkul, day, timeexecution)
 
-# Webhook Discord
-webhook = DiscordWebhook(url = data["webhook"], username = data["bot"])
-embed = DiscordEmbed(color = 0x33FFFF)
-embed.set_author(name = data["bot"], url = data["dashboard"], icon_url = data["icon"])
-embed.add_embed_field(name = "NIM", value = NIM, inline = False)
-embed.add_embed_field(name = "Name", value = Name, inline = False)
-embed.add_embed_field(name = "Class", value = Class, inline = False)
-embed.add_embed_field(name = "Matkul", value = Matkul, inline = False)
-embed.add_embed_field(name = "Status", value = "☑️ Success", inline = True)
-embed.add_embed_field(name = "Time", value = "🕖 "+day.strftime("%X"), inline = True)
-embed.add_embed_field(name = "Execution", value = "⏱️ "+timeexecution, inline = True)
-embed.set_footer(text = "✨ V.1.4 • Made with ☕ by Faiz")
-embed.set_timestamp()
-webhook.add_embed(embed)
-webhook.execute()
+def webhook(NIM, Name, Class, Matkul, day, timeexecution):
+    # Webhook Discord
+    webhook = DiscordWebhook(url = data["webhook"], username = data["bot"])
+    embed = DiscordEmbed(color = 0x33FFFF)
+    embed.set_author(name = data["bot"], url = data["dashboard"], icon_url = data["icon"])
+    embed.add_embed_field(name = "NIM", value = NIM, inline = False)
+    embed.add_embed_field(name = "Name", value = Name, inline = False)
+    embed.add_embed_field(name = "Class", value = Class, inline = False)
+    embed.add_embed_field(name = "Matkul", value = Matkul, inline = False)
+    embed.add_embed_field(name = "Status", value = "☑️ Success", inline = True)
+    embed.add_embed_field(name = "Time", value = "🕖 "+day.strftime("%X"), inline = True)
+    embed.add_embed_field(name = "Execution", value = "⏱️ "+timeexecution, inline = True)
+    embed.set_footer(text = "✨ V.1.5 • Made with ☕ by Faiz")
+    embed.set_timestamp()
+    webhook.add_embed(embed)
+    webhook.execute()
 
-# Loguot
-driver.get(data["logout"])
+# Schedule
+schedule.every().monday.at    ("10:00").do(absen, data["matkul"] [0], data["link"] [0])
+schedule.every().tuesday.at   ("07:30").do(absen, data["matkul"] [1], data["link"] [1])
+schedule.every().wednesday.at ("07:30").do(absen, data["matkul"] [2], data["link"] [2])
+schedule.every().wednesday.at ("15:00").do(absen, data["matkul"] [3], data["link"] [3])
+schedule.every().thursday.at  ("10:00").do(absen, data["matkul"] [4], data["link"] [4])
+
+while True :
+    schedule.run_pending()
+    print("\r\033[32mWaiting ■    \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting  ■   \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting   ■  \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting    ■ \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting     ■\033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting    ■ \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting   ■  \033[00m", end="")
+    time.sleep(0.05)
+    print("\r\033[32mWaiting  ■   \033[00m", end="")
+    time.sleep(0.05)
