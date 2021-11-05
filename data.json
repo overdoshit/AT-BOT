@@ -9,11 +9,13 @@
     "password"  : "<PASSWORD>",
     
     "matkul"    : [
+
         "<MATKUL0>", 
         "<MATKUL1>", 
         "<MATKUL2>", 
         "<MATKUL3>", 
         "<MATKUL4>"
+        
     ],
 
     "link"      : [
